@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گروه حسابداری</title>
+
+<!-- فونت ایموجی iPhone -->
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI+Emoji&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI Emoji',sans-serif;}
+html, body{height:100%;width:100%;background:#0f172a;display:flex;justify-content:center;align-items:center;direction:rtl;}
+/* لودینگ */
+#loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#0f172a;display:flex;justify-content:center;align-items:center;flex-direction:column;color:#fff;font-size:1.3rem;z-index:1000;}
+#loader span{font-weight:bold;font-size:1.4rem;border-right:2px solid #6366f1;padding-right:5px;white-space:nowrap;overflow:hidden;animation:blink 1s infinite;}
+@keyframes blink{0%,50%,100%{border-color:#6366f1;}25%,75%{border-color:transparent;}}
+
+/* کانتینر اصلی */
+.container{display:none;background:rgba(2,6,23,0.9);backdrop-filter:blur(8px);padding:32px 24px;border-radius:20px;max-width:440px;width:90%;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,0.5);color:#f8fafc;animation:fadeIn 1s forwards;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* متن و المان‌ها */
+h1{font-size:1.8rem;margin-bottom:12px;color:#f1f5f9;animation:fadeIn 1s forwards;}
+.subtitle{font-size:1rem;line-height:1.8;color:#cbd5f5;margin-bottom:24px;animation:fadeIn 1.2s forwards;}
+.features{text-align:right;margin-bottom:20px;font-size:0.95rem;color:#e5e7eb;animation:fadeIn 1.4s forwards;}
+.features li{margin-bottom:8px;}
+.cta{display:block;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;text-decoration:none;padding:14px;border-radius:14px;font-size:1.05rem;font-weight:500;transition:all 0.3s ease;margin-bottom:12px;}
+.cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(99,102,241,0.4);}
+.qr{margin-top:16px;animation:fadeIn 1.6s forwards;}
+.qr img{width:160px;background:#fff;padding:10px;border-radius:12px;}
+.qr p{font-size:0.8rem;color:#94a3b8;margin-top:8px;}
+
+/* دکمه کاربران فعال */
+#activeUsersBtn{margin-top:16px;background:#22c55e;color:#fff;border:none;border-radius:12px;padding:12px 20px;font-size:1rem;cursor:pointer;transition:0.3s;}
+#activeUsersBtn:hover{background:#16a34a;}
+#activeCount{font-weight:bold;margin-left:6px;}
+
+footer{margin-top:20px;font-size:0.75rem;color:#64748b;animation:fadeIn 1.8s forwards;}
+</style>
+</head>
+<body>
+
+<!-- لودینگ -->
+<div id="loader">
+  <span id="loading-text"></span>
+</div>
+
+<!-- کانتینر اصلی -->
+<div class="container">
+  <h1>💥 آزاد گوهردشت 💥</h1>
+  <p class="subtitle">
+درود امیدوارم حالتون خوب باشه <br>
+همه بزرگن و فهمیده اما لازم دونستم اینو بگم:<br>
+این گپو زدیم که دور هم باشیم و صحبت کنیم 💬<br>
+فقط احترامه که اولویته ✨
+  </p>
+
+  <ul class="features">
+    <li>💬 چت فعال و صمیمی</li>
+    <li>❓ پرسش و پاسخ آزاد</li>
+    
+    
+  </ul>
+
+  <a class="cta" href="https://t.me/Gp_hesabdary/22" target="_blank">ورود مستقیم به گروه تلگرام</a>
+
+  <div class="qr">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://t.me/Gp_hesabdary/22" alt="QR Code گروه">
+    <p>یا اسکن کن و سریع وارد شو 📱</p>
+  </div>
+
+  <button id="activeUsersBtn">تعداد کاربران یک ساعت اخیر: <span id="activeCount">31</span></button>
+
+  <footer>coded by @kameiyar</footer>
+</div>
+
+<script>
+// --- لودینگ تایپ ---
+const text = "Please wait ";
+let i = 0;
+const loadingSpan = document.getElementById("loading-text");
+function typeWriter(){
+  if(i<text.length){
+    loadingSpan.innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter,80);
+  } else {
+    loadingSpan.style.borderRight="none";
+    setTimeout(()=>{
+      document.getElementById("loader").style.display="none";
+      document.querySelector(".container").style.display="block";
+    },500);
+  }
+}
+window.addEventListener('load',typeWriter);
+
+// --- کاربران فعال یک ساعت اخیر ---
+let activeCount = parseInt(localStorage.getItem('activeCount')) || 31;
+const activeCountSpan = document.getElementById("activeCount");
+activeCountSpan.textContent = activeCount;
+
+// هر ۲ دقیقه یک واحد اضافه شود
+setInterval(()=>{
+  activeCount++;
+  localStorage.setItem('activeCount', activeCount);
+  activeCountSpan.textContent = activeCount;
+},120000); // 120000ms = 2 دقیقه
+
+// ریست ۱ ساعته
+const lastReset = parseInt(localStorage.getItem('lastReset')) || Date.now();
+if(Date.now() - lastReset > 3600000){ // 1 ساعت
+  activeCount = 31;
+  localStorage.setItem('activeCount', activeCount);
+  localStorage.setItem('lastReset', Date.now());
+  activeCountSpan.textContent = activeCount;
+} else {
+  localStorage.setItem('lastReset', lastReset);
+}
+
+// هر کلیک هم افزایش بده
+document.getElementById("activeUsersBtn").addEventListener('click', ()=>{
+  activeCount++;
+  localStorage.setItem('activeCount', activeCount);
+  activeCountSpan.textContent = activeCount;
+});
+</script>
+
+</body>
+</html>
